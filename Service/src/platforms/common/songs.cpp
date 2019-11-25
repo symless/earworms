@@ -109,7 +109,7 @@ void songs::changeSong() {
 
     resetVotes();
 
-    if(allSongs.contains(m_currentSong+1))
+    if(true)
     {
         m_currentSong++;
     }
@@ -125,5 +125,11 @@ void songs::resetVotes() {
     m_votes_negative = 0;
     m_votes_neutral = 0;
     m_votes_positive = 0;
+
+}
+
+void songs::mainLoop() {
+
+    w
 
 }

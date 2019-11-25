@@ -28,6 +28,8 @@ private:
 
     std::mutex m_updating;
 
+    
+
     int m_currentSong             = 0;
     unsigned int m_votes_positive = 0;
     unsigned int m_votes_negative = 0;
@@ -36,6 +38,8 @@ private:
 
     //Starts the songs background service
     void start();
+
+    void mainLoop();
 
     //stops the songs background service
     void stop();
