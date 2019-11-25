@@ -30,31 +30,32 @@ function createWindow() {
     mainWindow = null
   })
 
-  const request = net.request({
-    method:'GET',
-    protocol:'https:',
-    hostname:'github.com',
-    port: 443,
-    path: '/'
-  })
-
-  request.on('response', (response) => {
-    console.log(response);
-    response.on('error', (error) => {
-      console.log('Error: ${JSON.stringify(error)}')
-    })
-  })
-
-  request.on('login', (authInfo, callBack) => {
-    console.log("LOGIN")
-    console.log(authInfo)
-    console.log(callBack)
-  })
-
-
   ipcMain.on('gcs', (event, arg) => {
   console.log("got something")
   event.reply('hello', arg)
+
+  const request = require('request');
+
+  request({ 
+          body: "", 
+          followAllRedirects: true,
+          headers: {
+             'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          url: 'http://pathofexile.com/api/trade/search/Incursion'}, callback);
+
+  function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+          console.log('Success: \n'+body);
+      } else {
+          console.log("Error: \n"+body);
+      }
+  };
+
+
+
+
 })
 }
 

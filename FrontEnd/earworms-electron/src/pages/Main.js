@@ -29,7 +29,9 @@ class Main extends Component{
 	render(){
     return(
       <div className = "loginMain">
-      
+        <script>
+          window.require = require
+        </script>
         <button onClick={this.buttonPressed}> Hello! </button>
       </div>
     )

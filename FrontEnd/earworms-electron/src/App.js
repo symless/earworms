@@ -14,7 +14,6 @@ class App extends Component{
       <script>
         window.require = require
       </script>
-
       <Router>
         <Switch>
           <Route path='/main' component={Main}/>
