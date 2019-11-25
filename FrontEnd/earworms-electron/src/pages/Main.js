@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './Main.css';
-
 const electron = window.require('electron');
 // const fs = electron.remote.require('fs');
 const ipcRenderer  = electron.ipcRenderer;
@@ -58,7 +57,7 @@ class Main extends Component{
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

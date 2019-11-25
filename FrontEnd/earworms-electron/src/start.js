@@ -4,7 +4,13 @@ const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 
-let mainWindow
+let mainWindow;
+
+let connectionInfo = {
+  host: '',
+  port: 24825,
+  pollFrequency: 1000
+}
 
 function createWindow() {
   // mainWindow = new BrowserWindow({ width: 350, height: 200, frame  : false })
@@ -26,12 +32,24 @@ function createWindow() {
   // mainWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`)
   mainWindow.loadURL('http://localhost:3000');
   mainWindow.setAlwaysOnTop(true)
-  // mainWindow.setResizable(false)
+  mainWindow.setResizable(false)
   mainWindow.on('closed', () => {
     mainWindow = null
   })
 
   ipcMain.on('gcs', (event, arg) => {
+
+
+  ipcMain.on('set-connection-info', (event, args) => {
+    console.log('Set Connection Info', args)
+    connectionInfo = {
+      ...connectionInfo,
+      ...args
+    };
+    event.reply('get-connection-info', connectionInfo);
+  })
+
+  
   event.reply('hello', arg)
 
   const request = require('request');

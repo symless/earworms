@@ -11,15 +11,15 @@ class App extends Component{
   render(){
     return(
       <div>
-      <script>
-        window.require = require
-      </script>
-      <Router>
-        <Switch>
-          <Route path='/main' component={Main}/>
-          <Route path='/' component={Settings} />
-        </Switch>
-      </Router>
+        <script>
+          window.require = require
+        </script>
+        <Router>
+          <Switch>
+            <Route path='/main' component={Main}/>
+            <Route path='/' component={Settings} />
+          </Switch>
+        </Router>
       </div>
     )
   }

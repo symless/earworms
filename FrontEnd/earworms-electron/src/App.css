@@ -1,27 +1,31 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #09d3ac;
+body {
+  background-color: black;
 }
 
 .loginMain{
-  padding: 10px auto;
-  background-color: pink;
+  text-align: center;
+}
+
+.heading {
+  color:white;
+}
+
+.join-btn {
+  display: block;
+  margin: auto;
+  margin-top: 50px;
+  
+}
+
+.ip-address-control {
+  background-color: transparent;
+  border: none;
+  margin: 5px;
+  color: white;
+  border-bottom: 1px solid white;
+  width: 50px;
+}
+
+#root {
+  width: 100%;
 }
