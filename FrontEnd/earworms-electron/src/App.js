@@ -1,18 +1,18 @@
-import React,{ Component} from 'react';
+import React from 'react';
+import { Switch, Route } from 'react-router'
 import logo from './logo.svg';
 import './App.css';
+import Settings from './pages/settings';
+import Main from './pages/Main';
 
 class App extends Component{
   state = {}
   render(){
     return(
-      <div>
-        <div className = "IP address"> IP Address </div>
-        <input type = "text"/>
-
-        <div className = "IP address"> Name </div>
-        <input type = "text"/>
-      </div>
+      <Switch>
+        <Route path='settings' Component={Settings} />
+        <Route path='/' Component={Main}/>
+      </Switch>
     )
   }
 }
