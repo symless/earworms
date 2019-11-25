@@ -7,7 +7,18 @@ const fs = electron.remote.require('fs');
 const ipcRenderer  = electron.ipcRenderer;
 
 class App extends Component{
-  state = {}
+  constructor(props){
+    super(props);
+    this.state = {}
+    ipcRenderer.on('hello', (event, arg) =>{
+      console.log(arg);
+    })
+  }
+
+  buttonPressed = () => {
+    ipcRenderer.send('hello', 'hiii')
+  }
+
   render(){
     return(
       <div className = "loginMain">
@@ -19,6 +30,8 @@ class App extends Component{
 
         <div className = "name"> Name </div>
         <input type = "text"/>
+      
+        <button onClick={this.buttonPressed}> Hello! </button>
       </div>
     )
   }
