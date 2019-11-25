@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 
 const electron = window.require('electron');
@@ -19,6 +19,7 @@ class Main extends Component{
   }
 
 	render(){
+        return (
       <div className = "loginMain">
         <script>
           window.require = require
@@ -31,6 +32,7 @@ class Main extends Component{
       
         <button onClick={this.buttonPressed}> Hello! </button>
       </div>
+        );
     }
 }
 

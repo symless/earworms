@@ -9,13 +9,14 @@ import Main from './pages/Main';
 class App extends Component{
 
   render(){
+    return (
       <Router>
         <Switch>
           <Route path='/main' component={Main}/>
           <Route path='/' component={Settings} />
         </Switch>
       </Router>
-    )
+    );
   }
 }
 

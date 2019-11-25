@@ -5,14 +5,20 @@ const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 
-let mainWindow
+let mainWindow;
+
+let connectionInfo = {
+  host: '',
+  port: 24825,
+  pollFrequency: 1000
+}
 
 function createWindow() {
   // mainWindow = new BrowserWindow({ width: 350, height: 200, frame  : false })
   mainWindow = new BrowserWindow({ 
     width: 350, 
-    height: 200, 
-    frame: false,
+    height: 600, 
+    frame: true,
     webPreferences: {
       nodeIntegration: true,
     }
@@ -21,7 +27,7 @@ function createWindow() {
   // mainWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`)
   mainWindow.loadURL('http://localhost:3000');
   mainWindow.setAlwaysOnTop(true)
-  mainWindow.setResizable(false)
+  mainWindow.setResizable(true)
   // mainWindow.removeMenu()
   // mainWindow.setMenuBarVisibility(false)
   mainWindow.on('closed', () => {
@@ -41,6 +47,15 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+ipcMain.on('set-connection-info', (event, args) => {
+  console.log('Set Connection Info', args)
+  connectionInfo = {
+    ...connectionInfo,
+    ...args
+  };
+  event.reply('get-connection-info', connectionInfo);
 })
 
 ipcMain.on('hello', (event, arg) => {
