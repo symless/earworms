@@ -13,10 +13,11 @@ function createWindow() {
   const {net, ipcMain} = require('electron')
 
   mainWindow = new BrowserWindow({ 
-    width: 350, 
-    height: 200, 
-    // frame: false,
-    frame: true,
+    width: 411, 
+    // width: 800, 
+    height: 731, 
+    frame: false,
+    // frame: true,
     webPreferences: {
       nodeIntegration: true,
     }
@@ -31,7 +32,6 @@ function createWindow() {
   })
 
   ipcMain.on('gcs', (event, arg) => {
-  console.log("got something")
   event.reply('hello', arg)
 
   const request = require('request');
@@ -42,12 +42,18 @@ function createWindow() {
           headers: {
              'Content-Type': 'application/json',
           },
-          method: 'POST',
-          url: 'http://pathofexile.com/api/trade/search/Incursion'}, callback);
+          method: 'GET',
+          url: 'http://smaug:24825/songs/current'}, callback);
 
   function callback(error, response, body) {
       if (!error && response.statusCode == 200) {
-          console.log('Success: \n'+body);
+          /// we send ipcRenderer the informaton
+          console.log(body)
+          jsonBody = JSON.parse(body)
+
+          mainWindow.webContents.send('currentSong', jsonBody)
+
+
       } else {
           console.log("Error: \n"+body);
       }
