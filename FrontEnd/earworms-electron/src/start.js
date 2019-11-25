@@ -7,10 +7,19 @@ const path = require('path')
 let mainWindow
 
 function createWindow() {
-  mainWindow = new BrowserWindow({ width: 800, height: 600 })
+  // mainWindow = new BrowserWindow({ width: 350, height: 200, frame: false })
+  mainWindow = new BrowserWindow({ 
+    width: 350, 
+    height: 200, 
+    frame: true,
+    // resizeable: false
+  })
 
-  mainWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`)
-
+  // mainWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`)
+  mainWindow.loadURL('http://localhost:3000');
+  mainWindow.setAlwaysOnTop(true)
+  // mainWindow.removeMenu()
+  // mainWindow.setMenuBarVisibility(false)
   mainWindow.on('closed', () => {
     mainWindow = null
   })

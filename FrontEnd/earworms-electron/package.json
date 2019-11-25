@@ -24,7 +24,7 @@
     "react-scripts": "3.2.0"
   },
   "scripts": {
-    "electron": "electron .",
+    "electron-start": "electron .",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
