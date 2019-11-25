@@ -7,6 +7,8 @@ int apiServer::startApi(std::string address, unsigned short port)
         auto const _address = net::ip::make_address(address);
         auto const doc_root = std::make_shared<std::string>("");
 
+        std::cout << "Listening on " << address << ":" << port << std::endl;
+
         // The io_context is required for all I/O
         net::io_context ioc{1};
 

@@ -45,9 +45,12 @@ bool networking::isHostAlive(const boost::asio::ip::address& host)
 }
 
 bool networking::startServerApi() {
-
-    ;
-    return apiServer::startApi("0.0.0.0", 24825) == 0;
+#ifdef _DEBUG
+#define PORT_NUMBER 24824
+#else
+#define PORT_NUMBER 24825
+#endif
+    return apiServer::startApi("0.0.0.0", PORT_NUMBER) == 0;
 }
 
 bool networking::registerAPICommand(const std::string& command, std::function<std::string(const std::string&)> function)
