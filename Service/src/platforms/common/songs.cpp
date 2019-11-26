@@ -108,6 +108,7 @@ nlohmann::json songs::getCurrentSongDetails(const nlohmann::json& json) {
     details["position"] = int(allSongs[m_currentSong]["length"]) - m_timeLeftInSong;
     details["skipping"] = m_currentSkip;
 
+
     m_updating.unlock();
     return details;
 }
@@ -116,6 +117,7 @@ nlohmann::json songs::getCurrentSongVoteDetails(const nlohmann::json& json) {
     nlohmann::json details = {};
 
     details["songid"] = allSongs[m_currentSong]["id"];
+
 
     auto results = countVotes();
 
@@ -141,6 +143,7 @@ void songs::changeSong()
     }
     m_skipTimer = 3;
     m_currentSkip = false;
+
     std::cout << "Changing song to " << allSongs[m_currentSong]["name"];
     m_timeLeftInSong = allSongs[m_currentSong]["length"];
     m_updating.unlock();
@@ -156,6 +159,7 @@ void songs::mainLoop() {
     while (!m_quit)
     {
         shouldSkip();
+
         if (m_timeLeftInSong <= 0)
         {
             changeSong();
@@ -188,7 +192,7 @@ void songs::registerClient(const nlohmann::json& json) {
     {
         m_voteList[json["cid"]] = (client());
     }
-
+  
     if (json.contains("vote"))
     {
         m_voteList[json["cid"]].m_vote = json["vote"];

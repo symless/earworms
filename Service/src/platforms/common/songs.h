@@ -67,6 +67,7 @@ private:
     bool            m_currentSkip    = false;   //if the current song is about to be skipped
     int             m_skipTimer      = 3;       //Teh time left to skip
 
+
     //Songs
     int m_timeLeftInSong = 0;
 
@@ -79,6 +80,16 @@ private:
     nlohmann::json allSongs = {};
 
     std::map<std::string, unsigned int> countVotes();
+
+    //Songs
+    int m_timeLeftInSong = 0;
+
+    void mainLoop();
+
+    void registerClient(const nlohmann::json& json);
+
+    nlohmann::json allSongs = {};
+
 
 };
 
