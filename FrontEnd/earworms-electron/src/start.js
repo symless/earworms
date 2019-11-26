@@ -17,6 +17,7 @@ function createWindow() {
 
   console.log("creating Window")
   const {net, ipcMain} = require('electron')
+  const request = require('request');  
 
   mainWindow = new BrowserWindow({ 
     width: 411, 
@@ -29,16 +30,12 @@ function createWindow() {
     }
   })
 
-  // mainWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`)
   mainWindow.loadURL('http://localhost:3000');
   mainWindow.setAlwaysOnTop(true)
-  mainWindow.setResizable(false)
+  // mainWindow.setResizable(false)
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-
-  ipcMain.on('gcs', (event, arg) => {
-
 
   ipcMain.on('set-connection-info', (event, args) => {
     console.log('Set Connection Info', args)
@@ -49,38 +46,66 @@ function createWindow() {
     event.reply('get-connection-info', connectionInfo);
   })
 
-  
-  event.reply('hello', arg)
+  ipcMain.on('sending_vote', (event, args) => {
+    var vote = JSON.stringify({'vote': args, 'cid': 'shawarma'});
+    sendVote("POST", 'songs/votes', vote)
 
-  const request = require('request');
+  })
 
-  request({ 
-          body: "", 
-          followAllRedirects: true,
-          headers: {
-             'Content-Type': 'application/json',
-          },
-          method: 'GET',
-          url: 'http://smaug:24825/songs/current'}, callback);
+  function sendVote(type, url, value = ""){
+    request({ 
+      body: value, 
+      followAllRedirects: true,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: type,
+      url: 'http://smaug:24824/' + url}, callback);
 
-  function callback(error, response, body) {
+    function callback(error, response, body) {
       if (!error && response.statusCode == 200) {
-          /// we send ipcRenderer the informaton
-          console.log(body)
           jsonBody = JSON.parse(body)
-
-          mainWindow.webContents.send('currentSong', jsonBody)
-
-
+          console.log("sendVote: received");
+          console.log(jsonBody);
       } else {
           console.log("Error: \n"+body);
       }
-  };
+    };
+  }
 
 
+  /// TODO: need to handle callback seperately
+  function sendRequest(type, url, value = ""){
+    console.log("SENDING REQUEST:", type, url);
+    request({ 
+      body: value, 
+      followAllRedirects: true,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: type,
+      url: 'http://smaug:24824/' + url}, callback);
 
+    function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+          jsonBody = JSON.parse(body)
+          console.log("received");
+          console.log(jsonBody);
+          mainWindow.webContents.send('currentSong', jsonBody);
+      } else {
+          console.log("Error: \n"+error);
+      }
+    };
+  }
 
-})
+  function updateCurrentSong(){
+    console.log("updting current song");
+    var randomCid = JSON.stringify({'cid': 'shawarma'});
+    sendRequest('GET',  "songs/current", randomCid);
+  }
+
+  const updater = setInterval(updateCurrentSong, 1000);
+
 }
 
 app.on('ready', createWindow)

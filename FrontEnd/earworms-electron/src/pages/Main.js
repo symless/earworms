@@ -9,26 +9,46 @@ class Main extends Component{
     super(props);
     this.state = {
       currentSong: {
-        artist: null,
-        id: null,
-        name: null,
-        lengh: null,
-        position: null,
-      }
+        artist: "",
+        id: 0,
+        name: "",
+        length: 0,
+        position: 0,
+        art: "",
+      },
+      progress: "1%"
     }
-    ipcRenderer.on('gcs', (event, arg) =>{
-      console.log(arg);
-    })
 
     ipcRenderer.on('currentSong', (event, arg) => {
-      console.log(arg["artist"])
       this.state.currentSong = arg
       this.setState({currentSong : this.state.currentSong})
+
+      /// get Progress
+      var newVar = Math.ceil((this.state.currentSong.position/this.state.currentSong.length) * 100) + "%";
+      this.setState({progress: newVar})
+
     })
   }
 
-  buttonPressed = () => {
-    ipcRenderer.send('gcs', 'hello')
+  downVote = () => {
+    ipcRenderer.send('sending_vote', -1);
+  }
+
+  upVote = () => {
+    ipcRenderer.send('sending_vote', 1);
+  }
+
+  
+
+  getTime = (x) => {
+    if (x === null){
+      return "0:00"
+    }else{
+      //// set the time to timer
+      var minute = x / 60;
+      var second = x % 60;
+      return Math.floor(minute) + ":" + Math.floor(second)
+    }
   }
 
 	render(){
@@ -37,7 +57,21 @@ class Main extends Component{
         <script>
           window.require = require
         </script>
-        <img className = "albumImage" src = "https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-sample-grunge-red-round-stamp.jpg" />
+        <img className = "albumImage" src = {this.state.currentSong.art} />
+        <div className = "timer">
+          <div className = "progressBar">
+              <div className = "progress" style={{width: this.state.progress}}></div>
+          </div>
+          <div className = "timeProgress">
+            <div className = "startTime">
+              {this.getTime(this.state.currentSong.position)}
+            </div>
+            <div className = "endTime">
+              {this.getTime(this.state.currentSong.length)}
+            </div>
+          </div>
+          
+        </div>
         <div className = "bodyMain">
           <div className = "songDetailHolderMain">
             <div className = "songTitleMain">
@@ -48,10 +82,10 @@ class Main extends Component{
             </div>
           </div>
           <div className = "buttonHolderMain">
-            <button onClick={this.buttonPressed}>
+            <button onClick={this.downVote}>
               <img className = "buttonImg" src = {process.env.PUBLIC_URL + "/thumbs_down.png"}/>
             </button>
-            <button onClick={this.buttonPressed}>
+            <button onClick={this.upVote}>
               <img className = "buttonImg" src = {process.env.PUBLIC_URL + "/thumbs_up.png"}/>
             </button>
           </div>

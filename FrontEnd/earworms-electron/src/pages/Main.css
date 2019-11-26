@@ -57,3 +57,37 @@ button{
 	border:0; 
 	background:transparent;
 }
+
+.timer{
+	display: flex;
+	flex-direction: column;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin-top: -2px;
+	z-index: 1;
+}
+
+.progress{
+	background-color: white;
+	height: 5px;
+	border-radius: 4px;
+}
+
+.progressBar{
+	flex-grow: 1;
+	background-color: #686868;
+	height: 5px;
+	border-radius: 4px;
+}
+
+.timeProgress{
+	padding-top: 5px;
+	color: rgba(255,255,255,0.5);
+	font-style: normal;
+	font-weight: normal;
+	font-size: 12px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
