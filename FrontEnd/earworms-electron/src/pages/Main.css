@@ -1,0 +1,59 @@
+.albumImage{
+	width: 411px;
+	height: 411px;  
+	-webkit-user-select: none;
+  	-webkit-app-region: drag;
+}
+
+.displayMain{
+	background-color: #530000;
+	height: 731px;
+	width: 411px;
+	display: flex;
+	flex-direction: column;
+	/*TODO: change the font family to Roboto*/
+	font-family: 'Arial';
+}
+
+.bodyMain{
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.songDetailHolderMain{
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+.songTitleMain{
+	font-size: 18px;
+	font-weight: 500;
+	font-style:normal;
+	color: white;
+}
+
+.songArtistMain{
+	font-style: normal;
+	font-weight: normal;
+	font-size: 12px;
+	color: rgba(255,255,255,0.5);
+}
+
+.buttonHolderMain{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	flex-grow: 2;
+}
+
+button{
+	border:0; 
+	background:transparent;
+}

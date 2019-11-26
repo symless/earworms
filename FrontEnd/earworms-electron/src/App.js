@@ -7,16 +7,21 @@ import Main from './pages/Main';
 
 
 class App extends Component{
-
+  state = {}
   render(){
-    return (
-      <Router>
-        <Switch>
-          <Route path='/main' component={Main}/>
-          <Route path='/' component={Settings} />
-        </Switch>
-      </Router>
-    );
+    return(
+      <div>
+        <script>
+          window.require = require
+        </script>
+        <Router>
+          <Switch>
+            <Route path='/main' component={Main}/>
+            <Route path='/' component={Settings} />
+          </Switch>
+        </Router>
+      </div>
+    )
   }
 }
 
