@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
-import { parse } from 'path';
+import './Settings.css';
+import Logo from '../assets/logo.svg';
 const {ipcRenderer} = window.require('electron');
 
 class Settings extends Component {
@@ -66,8 +67,8 @@ class Settings extends Component {
         } else {
             return (
                 <div className="loginMain"> 
-                    <h1 className="heading">Earworms</h1>
-                    <div className="">IP Address</div>
+                    <img className="logo" src={Logo} alt='Earworms'></img>
+                    <div className="ip-label">Host IP</div>
                     <input type="text" name="ipOne" value={ipOne} onChange={this.handleInput} className="ip-address-control"/>
                     <input type="text" name="ipTwo" value={ipTwo} onChange={this.handleInput} className="ip-address-control"/>
                     <input type="text" name="ipThree" value={ipThree} onChange={this.handleInput} className="ip-address-control"/>
