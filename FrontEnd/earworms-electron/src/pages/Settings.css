@@ -1,0 +1,72 @@
+body {
+    background-color: black;
+}
+
+button {
+    -webkit-user-select: all;
+    -webkit-app-region: no-drag;
+}
+
+input {
+    -webkit-user-select: all;
+    -webkit-app-region: no-drag;
+}
+
+    input:focus {
+        outline: none;
+    }
+
+.loginMain{
+    text-align: center;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+}
+
+.logo {
+    color:white;
+    margin-top: 75px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 302px;
+}
+
+.ip-label {
+    margin-top: 105px;
+    color: #7f7f7f;
+}
+
+.join-btn {
+    display: block;
+    width: 179px;
+    height: 42px;
+    margin: auto;
+    margin-top: 70px;
+    background: #FFFFFF;
+    border-radius: 45px;
+    background-color: white;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+}
+
+.ip-address-control {
+    background-color: transparent;
+    border: none;
+    margin: 6px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 30px;
+    line-height: 35px;
+    padding: 8px;
+    color: white;
+    border-bottom: 1px solid white;
+    width: 50px;
+    text-align: center;
+}
+
+#root {
+    width: 100%;
+}
