@@ -106,6 +106,7 @@ nlohmann::json songs::getCurrentSongDetails(const nlohmann::json& json) {
     nlohmann::json details = allSongs[m_currentSong];
 
     details["position"] = int(allSongs[m_currentSong]["length"]) - m_timeLeftInSong;
+    details["skipping"] = m_currentSkip;
 
     m_updating.unlock();
     return details;
@@ -116,28 +117,11 @@ nlohmann::json songs::getCurrentSongVoteDetails(const nlohmann::json& json) {
 
     details["songid"] = allSongs[m_currentSong]["id"];
 
-    unsigned int    m_votes_positive = 0;
-    unsigned int    m_votes_negative = 0;
-    unsigned int    m_votes_neutral  = 0;
+    auto results = countVotes();
 
-    for (auto i = m_voteList.begin(); i != m_voteList.end(); ++i) {
-        i->second.m_vote;
-        switch(i->second.m_vote){
-            case client::Neutral:
-                m_votes_neutral += 1;
-                break;
-            case client::Positive:
-                m_votes_positive += 1;
-                break;
-            case client::Negative:
-                m_votes_negative += 1;
-                break;
-        }
-    }
-
-    details["good"] = m_votes_positive;
-    details["bad"] = m_votes_negative;
-    details["neutral"] = m_votes_neutral;
+    details["good"]     = results["good"];
+    details["bad"]      = results["bad"];
+    details["neutral"]  = results["neutral"];
 
     return details;
 
@@ -155,7 +139,8 @@ void songs::changeSong()
     {
         m_currentSong = 0;
     }
-
+    m_skipTimer = 3;
+    m_currentSkip = false;
     std::cout << "Changing song to " << allSongs[m_currentSong]["name"];
     m_timeLeftInSong = allSongs[m_currentSong]["length"];
     m_updating.unlock();
@@ -170,9 +155,19 @@ void songs::mainLoop() {
     //keep running till quit is signaled
     while (!m_quit)
     {
+        shouldSkip();
         if (m_timeLeftInSong <= 0)
         {
             changeSong();
+        }
+        else if (m_currentSkip && m_skipTimer <= 0)
+        {
+            changeSong();
+        }
+        else if (m_currentSkip && m_skipTimer > 0)
+        {
+            m_skipTimer--;
+            m_timeLeftInSong--;
         }
         else
         {
@@ -225,4 +220,56 @@ nlohmann::json songs::setVote(const nlohmann::json & json ) {
     }
     return response;
 
+}
+
+void songs::shouldSkip() {
+    auto results = countVotes();
+
+    int    m_votes_positive = results["good"];
+    int    m_votes_negative = results["bad"];
+    int    m_votes_neutral  = results["neutral"];
+
+    //Count the total sentiment of the room
+    int    m_votes_total    = (m_votes_positive) +
+                              (m_votes_negative) +
+                              (m_votes_neutral);
+
+    //count the negative votes over positive
+    float negtiveThresh = float(m_votes_negative - m_votes_positive);
+
+    if ( m_votes_total > 0 && negtiveThresh > (m_votes_total * 0.25))
+
+    {
+        std::cout << "Skip threshold met" << std::endl;
+        m_currentSkip = true;
+    }
+
+}
+
+std::map<std::string, unsigned int> songs::countVotes() {
+
+
+    unsigned int    m_votes_positive = 0;
+    unsigned int    m_votes_negative = 0;
+    unsigned int    m_votes_neutral  = 0;
+
+    for (auto i = m_voteList.begin(); i != m_voteList.end(); ++i) {
+        i->second.m_vote;
+        switch(i->second.m_vote){
+            case client::Neutral:
+                m_votes_neutral += 1;
+                break;
+            case client::Positive:
+                m_votes_positive += 1;
+                break;
+            case client::Negative:
+                m_votes_negative += 1;
+                break;
+        }
+    }
+    std::map<std::string, unsigned int> count;
+    count["good"] = m_votes_positive;
+    count["neutral"] = m_votes_neutral;
+    count["bad"] = m_votes_negative;
+    return count;
 }
