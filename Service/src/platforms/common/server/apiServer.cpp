@@ -1,4 +1,5 @@
 #include "apiServer.h"
+#include <string>
 
 int apiServer::startApi(std::string address, unsigned short port)
 {
@@ -189,16 +190,22 @@ void apiServer::handle_request(beast::string_view doc_root, http::request<Body, 
             return "Sorry that command(" + command + ") was not found";
         };
     }
+    try{
 
-    http::response<http::string_body> res{ http::status::ok, req.version() };
-    res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-    res.set(http::field::content_type, "application/json");
-    res.keep_alive(req.keep_alive());
+        http::response<http::string_body> res{ http::status::ok, req.version() };
+        res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
+        res.set(http::field::content_type, "application/json");
+        res.keep_alive(req.keep_alive());
 
-    //Return the response from the found function with the received parameters
-    res.body() = fnc(params);
-    res.prepare_payload();
-    return send(std::move(res));
+        //Return the response from the found function with the received parameters
+        res.body() = fnc(params);
+        res.prepare_payload();
+        return send(std::move(res));
+    }
+    catch(std::string error)
+    {
+        return send(bad_request(error));
+    }
 }
 
 std::map<std::string, std::function<std::string(const std::string&)>> apiServer::m_commandMap;
