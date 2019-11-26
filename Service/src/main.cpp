@@ -22,15 +22,46 @@ int main()
 
     std::cout << "Starting web interface..." << std::endl;
 
-    networking::registerAPICommand("/songs/current", [songService](const std::string&)->std::string
+    networking::registerAPICommand("/songs/current", [songService](const std::string& json)->std::string
     {
-        return songService->getCurrentSongDetails().dump(4);
+        try {
+            nlohmann::json _json = nlohmann::json::parse(json.c_str());
+            return songService->getCurrentSongDetails(_json).dump(4);
+        }
+        catch (...)
+        {
+            throw std::string("Bad json");
+        }
+
     });
 
-    networking::registerAPICommand("/songs/votes", [songService](const std::string&)->std::string
+    networking::registerAPICommand("/songs/votes", [songService](const std::string& json)->std::string
     {
-        return songService->getCurrentSongVoteDetails().dump(4);
+        try {
+            nlohmann::json _json = nlohmann::json::parse(json.c_str());
+            return songService->getCurrentSongVoteDetails(_json).dump(4);
+        }
+        catch (...)
+        {
+            throw std::string("Bad json");
+        }
     });
+
+
+
+    networking::registerAPICommand("/vote", [songService](const std::string& json)->std::string
+    {
+        try {
+            nlohmann::json _json = nlohmann::json::parse(json.c_str());
+            return songService->setVote(_json).dump(4);
+        }
+        catch (...)
+        {
+            throw std::string("Bad json");
+        }
+    });
+
+    songService->start();
 
     networking::startServerApi();
 
