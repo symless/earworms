@@ -6,13 +6,21 @@
 }
 
 .displayMain{
-	background-color: #530000;
+	background-color: #000000;
 	height: 731px;
 	width: 411px;
 	display: flex;
 	flex-direction: column;
 	/*TODO: change the font family to Roboto*/
 	font-family: 'Arial';
+}
+
+.colorOverlay{
+	background-color: rgba(255,0,0,0.1);
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	
 }
 
 .bodyMain{
@@ -48,14 +56,30 @@
 .buttonHolderMain{
 	display: flex;
 	flex-direction: row;
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: center;
 	flex-grow: 2;
+	width: 224px;
+	margin: 0 auto;
 }
 
 button{
 	border:0; 
 	background:transparent;
+	height: 81px;
+}
+
+.downVote{
+	margin-top: 21px;
+}
+
+.upVote{
+	margin-bottom: 21px;
+}
+
+.pause-image{
+	height:36px;
+	width:36px;
 }
 
 .timer{
@@ -71,6 +95,10 @@ button{
 	background-color: white;
 	height: 5px;
 	border-radius: 4px;
+}
+
+.nextSongHolder{
+	color: #ffffff
 }
 
 .progressBar{

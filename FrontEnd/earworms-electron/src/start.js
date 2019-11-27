@@ -14,14 +14,15 @@ let connectionInfo = {
 
 function createWindow() {
   // mainWindow = new BrowserWindow({ width: 350, height: 200, frame  : false })
+  const serverUrl  = "http://smaug:24824/"
 
   console.log("creating Window")
   const {net, ipcMain} = require('electron')
   const request = require('request');  
 
   mainWindow = new BrowserWindow({ 
-    width: 411, 
-    // width: 800, 
+    // width: 411, 
+    width: 1200, 
     height: 731, 
     frame: false,
     // frame: true,
@@ -48,7 +49,7 @@ function createWindow() {
 
   ipcMain.on('sending_vote', (event, args) => {
     var vote = JSON.stringify({'vote': args, 'cid': 'shawarma'});
-    sendVote("POST", 'songs/votes', vote)
+    sendVote("POST", 'vote', vote)
 
   })
 
@@ -60,7 +61,7 @@ function createWindow() {
         'Content-Type': 'application/json',
       },
       method: type,
-      url: 'http://smaug:24824/' + url}, callback);
+      url: serverUrl + url}, callback);
 
     function callback(error, response, body) {
       if (!error && response.statusCode == 200) {
@@ -76,7 +77,6 @@ function createWindow() {
 
   /// TODO: need to handle callback seperately
   function sendRequest(type, url, value = ""){
-    console.log("SENDING REQUEST:", type, url);
     request({ 
       body: value, 
       followAllRedirects: true,
@@ -84,13 +84,11 @@ function createWindow() {
         'Content-Type': 'application/json',
       },
       method: type,
-      url: 'http://smaug:24824/' + url}, callback);
+      url: serverUrl + url}, callback);
 
     function callback(error, response, body) {
       if (!error && response.statusCode == 200) {
           jsonBody = JSON.parse(body)
-          console.log("received");
-          console.log(jsonBody);
           mainWindow.webContents.send('currentSong', jsonBody);
       } else {
           console.log("Error: \n"+error);
@@ -98,14 +96,68 @@ function createWindow() {
     };
   }
 
+
+  function getNextSong(type, url, value = ""){
+    request({ 
+      body: value, 
+      followAllRedirects: true,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: type,
+      url: serverUrl + url}, callback);
+
+    function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+          jsonBody = JSON.parse(body)
+          mainWindow.webContents.send('nextSong', jsonBody);
+      } else {
+          console.log("Error: \n"+error);
+      }
+    };
+  }
+
   function updateCurrentSong(){
-    console.log("updting current song");
     var randomCid = JSON.stringify({'cid': 'shawarma'});
     sendRequest('GET',  "songs/current", randomCid);
   }
 
-  const updater = setInterval(updateCurrentSong, 1000);
+  function updateNextSong(){
+    var randomCid = JSON.stringify({'cid': 'shawarma'});
+    getNextSong('GET',  "songs/next");
+  }
 
+  function getVoteRequest(type, url, value = ""){
+    request({ 
+      body: value, 
+      followAllRedirects: true,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: type,
+      url: serverUrl + url}, callback);
+
+    function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+          jsonBody = JSON.parse(body)
+          console.log(jsonBody)
+          mainWindow.webContents.send('voteStatus', jsonBody);
+      } else {
+          console.log("Error: \n"+error);
+      }
+    };
+  }
+
+  function updateCurrentVote(){
+    var randomCid = JSON.stringify({'cid': 'shawarma'});
+    getVoteRequest('GET', "songs/votes", randomCid);
+  }
+
+
+  console.log("running updaters....");
+  const voteUpdater = setInterval(updateCurrentVote, 1000);
+  const songUpdater = setInterval(updateCurrentSong, 1000);
+  const nextSongUpdater = setInterval(updateNextSong, 1000);
 }
 
 app.on('ready', createWindow)
