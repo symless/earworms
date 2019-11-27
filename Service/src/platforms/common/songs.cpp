@@ -103,7 +103,7 @@ nlohmann::json songs::getCurrentSongDetails(const nlohmann::json& json) {
 
     m_updating.lock();
 
-    nlohmann::json details = allSongs[m_currentSong];
+    nlohmann::json details = getSongDetails(m_currentSong);
 
     details["position"] = int(allSongs[m_currentSong]["length"]) - m_timeLeftInSong;
     details["skipping"] = m_currentSkip;
@@ -276,4 +276,15 @@ std::map<std::string, unsigned int> songs::countVotes() {
     count["neutral"] = m_votes_neutral;
     count["bad"] = m_votes_negative;
     return count;
+}
+
+nlohmann::json songs::getNextSong() {
+    if(m_currentSong + 1 < allSongs.size()-1)
+            return allSongs[m_currentSong + 1];
+    else
+        return allSongs[0];
+}
+
+nlohmann::json songs::getSongDetails(int index) {
+    return allSongs[index];
 }

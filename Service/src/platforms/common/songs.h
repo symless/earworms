@@ -23,6 +23,7 @@ public:
 
     nlohmann::json setVote(const nlohmann::json&);
 
+    nlohmann::json getNextSong();
 
     void changeSong();
 
@@ -81,15 +82,7 @@ private:
 
     std::map<std::string, unsigned int> countVotes();
 
-    //Songs
-    int m_timeLeftInSong = 0;
-
-    void mainLoop();
-
-    void registerClient(const nlohmann::json& json);
-
-    nlohmann::json allSongs = {};
-
+    nlohmann::json getSongDetails(int index);
 
 };
 

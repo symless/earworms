@@ -47,6 +47,16 @@ int main()
         }
     });
 
+    networking::registerAPICommand("/songs/next", [songService](const std::string& json)->std::string
+    {
+        try {
+            return songService->getNextSong().dump(4);
+        }
+        catch (...)
+        {
+            throw std::string("Bad json");
+        }
+    });
 
 
     networking::registerAPICommand("/vote", [songService](const std::string& json)->std::string
